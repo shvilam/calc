@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
     Container,
     Row,
@@ -9,7 +9,7 @@ import {
     Badge,
     Button
 } from 'react-bootstrap';
-import { FOUND_DATA, FUCHER_INFLATION_A_MONTH, FUCHER_PROFIT_A_MONTH, Result, TAX_RATE } from './data';
+import { FOUND_DATA, FUCHER_INFLATION_A_MONTH, FUCHER_PROFIT_A_MONTH, TAX_RATE } from './data';
 import { calcPastInfulation, calaPastProfit, getFoundFee, calculateFucherProfit, calculateNetProfit } from './util';
 
 
@@ -98,9 +98,9 @@ const FinancialCalculator2 = () => {
         calcLineCount();
     };
 
-    useEffect(() => {
-        calculateResults();
-    }, [calculateResults, currentAmount, currentFund, newFund, numOfMothHold, numOfMothWillHolding]);
+    //useEffect(() => {
+    //    calculateResults();
+    //}, [calculateResults, currentAmount, currentFund, newFund, numOfMothHold, numOfMothWillHolding]);
 
 
     const getInstrumentLabel = (value) => {

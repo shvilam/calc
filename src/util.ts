@@ -1,4 +1,4 @@
-import { PROFIT_DATA, INFLATION_DATA, FOUND_DATA, Result } from './data';
+import { PROFIT_DATA, INFLATION_DATA, FOUND_DATA } from './data';
 
 // TODO: Check what happpend more then 12 month
 export const calaPastProfit = (numOfMoth: number): number => {
