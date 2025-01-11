@@ -1,6 +1,6 @@
 export const TAX_RATE = 0.25;
 export const FUCHER_PROFIT_A_MONTH = 4.3;
-export const FUCHER_INFLATION_A_MONTH = 3.2;
+export const FUCHER_INFLATION_A_MONTH = 3.4;
 
 export type Result = {
   initialInvestment: string,
@@ -1387,4 +1387,26 @@ export const PROFIT_DATA = [{ date: "2024-12", value: 0.05 },
 { date: "2024-2", value: 0.35 },
 { date: "2024-1", value: 0.35 },
 { date: "2023-12", value: 0.35 },
-{ date: "2023-11", value: 0.35 }]
+{ date: "2023-11", value: 0.35 },
+{ date: "2023-10", value: 0.35 },
+{ date: "2023-9", value: 0.35 },
+{ date: "2023-8", value: 0.35 },
+{ date: "2023-7", value: 0.35 },
+{ date: "2023-6", value: 0.35 },
+{ date: "2023-5", value: 0.35 },
+{ date: "2023-4", value: 0.35 },
+{ date: "2023-3", value: 0.35 },
+{ date: "2023-2", value: 0.35 },
+{ date: "2023-1", value: 0.35 },
+{ date: "2022-12", value: 0.35 },
+{ date: "2022-11", value: 0.35 },
+{ date: "2022-10", value: 0.35 },
+{ date: "2022-9", value: 0.35 },
+{ date: "2022-8", value: 0.35 },
+{ date: "2022-7", value: 0.35 },
+{ date: "2022-6", value: 0.35 },
+{ date: "2022-5", value: 0.35 },
+{ date: "2022-4", value: 0.35 },
+{ date: "2022-3", value: 0.35 },
+{ date: "2022-2", value: 0.35 },
+{ date: "2022-1", value: 0.35 }]

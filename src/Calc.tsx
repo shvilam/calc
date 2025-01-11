@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
     Container,
     Row,
@@ -15,8 +15,6 @@ import { calcPastInfulation, calaPastProfit, getFoundFee, calculateFucherProfit,
 
 const FinancialCalculator2 = () => {
     // State declarations
-
-
     const [currentAmount, setAmount] = useState(100);
     const [numOfMothHold, setMothOfHold] = useState(12);
     const [numOfMothWillHolding, setMothOfWillHolding] = useState(12);
@@ -32,10 +30,15 @@ const FinancialCalculator2 = () => {
 
     const calcLineCount = () => {
         const pastInfulationByMoth = calcPastInfulation(numOfMothHold);
+        console.log('-----------',{numOfMothHold},'---',{pastInfulationByMoth},'-------');
         const pastProfitByMoth = calaPastProfit(numOfMothHold);
+        console.log('-----------',{numOfMothHold},'---',{pastProfitByMoth},'-----------');
         const feeByMonth = getFoundFee(newFund, numOfMothWillHolding);
+        console.log('-----------',{feeByMonth},'-------------',{numOfMothWillHolding},'---------------');
         const fuacherInflationByMonth = ((FUCHER_INFLATION_A_MONTH / 12) * numOfMothWillHolding) / 100;
+        console.log('-----------',{fuacherInflationByMonth},'-------------',{numOfMothWillHolding},'--');
         const fuacherProfitByMonth = ((FUCHER_PROFIT_A_MONTH / 12) * numOfMothWillHolding) / 100;
+        console.log('-----------',{fuacherProfitByMonth},'-------------',{numOfMothWillHolding},'-----');
         console.log('------------------------------------------------------');    
         
         const resCase1Step1 = calculateNetProfit({
@@ -94,9 +97,9 @@ const FinancialCalculator2 = () => {
 
     };
 
-    const calculateResults = () => {
-        calcLineCount();
-    };
+    // const calculateResults = () => {
+    //     calcLineCount();
+    // };
 
     //useEffect(() => {
     //    calculateResults();
