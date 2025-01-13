@@ -11,23 +11,19 @@ export const calaPastProfit = (numOfMoth: number): number => {
   }
   
   export const getFoundFee = (foundKey: string, numOfMothWillHolding: number): number => {
-    //console.log(foundKey, numOfMothWillHolding);
     const item = FOUND_DATA.find((item) => item.key === foundKey);
     if (item) {
        const fee = parseFloat(item.price.replace("%", "") || "0");
-       //console.log('XXX',fee, numOfMothWillHolding, ((fee/12)*numOfMothWillHolding)/100);
        return ((fee/12)*numOfMothWillHolding)/100;
     }
     return 0;
   }
-  
   
   export const calcPastInfulation = (numOfMoth): number => {
     const months = INFLATION_DATA.month[0].date;
     let totalInfulation = 0;
     for (let index = 0; index < numOfMoth; index++) {
       totalInfulation += months[index].percent;
-      //console.log(months[index].monthDesc, months[index].percent, totalInfulation);
     }
     return totalInfulation/100;
   }
@@ -39,7 +35,11 @@ export const calaPastProfit = (numOfMoth: number): number => {
     taxRatePercentage = 0.25
   }) {
     //console.log({currentAmount,profitPercentage, inflationRatePercentage, feesPercentage, taxRatePercentage});
-  
+    // profirtPerMonth * NumOfMoth = profitPercentage
+    // profitPercentage - feesPercentage
+    // feesPerNonth * NumOfMoth =  feesPercentage 
+    // 8.6-0.028 = 8.572 / 24m 
+    // 4.3-0.014 = 4.286 / 12m
     const fuecherAmount = currentAmount * (1 + profitPercentage);
     const fuecherAmountAferFee = fuecherAmount / (1 + feesPercentage);
     const grossProfit = fuecherAmountAferFee - currentAmount;
@@ -54,7 +54,7 @@ export const calaPastProfit = (numOfMoth: number): number => {
       grossProfit: grossProfit.toFixed(2),
       tax: tax.toFixed(2),
       netProfit: netProfit.toFixed(2),
-      nowInvestment: (currentAmount + netProfit)
+      nowInvestment: (parseFloat(currentAmount) + netProfit)
     };
   }
 
@@ -65,19 +65,20 @@ export const calaPastProfit = (numOfMoth: number): number => {
     taxRatePercentage = 0.25 
   }) {
     //console.log({currentAmount, profitPercentage, inflationRatePercentage, taxRatePercentage});
+    const realPrfoit = Math.max(profitPercentage - inflationRatePercentage, 0); 
     const initialInvestment: number = currentAmount / (1 + profitPercentage);
-    
-    const grossProfit = currentAmount - initialInvestment;
-    const taxableProfit = Math.max(grossProfit, 0); // Ensure taxable profit is non-negative
+    const taxableProfit = initialInvestment * realPrfoit
+    // const grossProfit = currentAmount - initialInvestment;
+    // const taxableProfit = Math.max(grossProfit, 0); // Ensure taxable profit is non-negative
 
-    const tax = taxableProfit * Math.max(taxRatePercentage-inflationRatePercentage,0);
+    const tax = taxableProfit * taxRatePercentage;
     const netProfit = taxableProfit - tax;
-  
+    const nowInvestment = currentAmount - tax;
     return {
       initialInvestment: initialInvestment.toFixed(2),
-      grossProfit: grossProfit.toFixed(2),
+      //grossProfit: grossProfit.toFixed(2),
       tax: tax.toFixed(2),
       netProfit: netProfit.toFixed(2),
-      nowInvestment: (initialInvestment + netProfit)
+      nowInvestment: nowInvestment.toFixed(2)
     };
   }

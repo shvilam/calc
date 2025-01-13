@@ -12,10 +12,10 @@ import {
 import { FOUND_DATA, FUCHER_INFLATION_A_MONTH, FUCHER_PROFIT_A_MONTH, TAX_RATE } from './data';
 import { calcPastInfulation, calaPastProfit, getFoundFee, calculateFucherProfit, calculateNetProfit } from './util';
 
-
+//TODO: inflation    
 const FinancialCalculator2 = () => {
     // State declarations
-    const [currentAmount, setAmount] = useState(100);
+    const [currentAmount, setAmount] = useState(0);
     const [numOfMothHold, setMothOfHold] = useState(12);
     const [numOfMothWillHolding, setMothOfWillHolding] = useState(12);
     const [currentFund, setCurrentFund] = useState(FOUND_DATA[0].key);
@@ -30,17 +30,21 @@ const FinancialCalculator2 = () => {
 
     const calcLineCount = () => {
         const pastInfulationByMoth = calcPastInfulation(numOfMothHold);
-        console.log('-----------',{numOfMothHold},'---',{pastInfulationByMoth},'-------');
+        console.log('-----------', { numOfMothHold }, '---', { pastInfulationByMoth }, '-------');
         const pastProfitByMoth = calaPastProfit(numOfMothHold);
-        console.log('-----------',{numOfMothHold},'---',{pastProfitByMoth},'-----------');
-        const feeByMonth = getFoundFee(newFund, numOfMothWillHolding);
-        console.log('-----------',{feeByMonth},'-------------',{numOfMothWillHolding},'---------------');
+        console.log('-----------', { numOfMothHold }, '---', { pastProfitByMoth }, '-----------');
+        const currentfeeByMonth = getFoundFee(currentFund, numOfMothWillHolding);
+
+        console.log('-----------', { currentfeeByMonth }, '-------------', { numOfMothWillHolding }, '---------------');
+
+        const newfeeByMonth = getFoundFee(newFund, numOfMothWillHolding);
+        console.log('-----------', { newfeeByMonth }, '-------------', { numOfMothWillHolding }, '---------------');
         const fuacherInflationByMonth = ((FUCHER_INFLATION_A_MONTH / 12) * numOfMothWillHolding) / 100;
-        console.log('-----------',{fuacherInflationByMonth},'-------------',{numOfMothWillHolding},'--');
+        console.log('-----------', { fuacherInflationByMonth }, '-------------', { numOfMothWillHolding }, '--');
         const fuacherProfitByMonth = ((FUCHER_PROFIT_A_MONTH / 12) * numOfMothWillHolding) / 100;
-        console.log('-----------',{fuacherProfitByMonth},'-------------',{numOfMothWillHolding},'-----');
-        console.log('------------------------------------------------------');    
-        
+        console.log('-----------', { fuacherProfitByMonth }, '-------------', { numOfMothWillHolding }, '-----');
+        console.log('------------------------------------------------------');
+
         const resCase1Step1 = calculateNetProfit({
             currentAmount: currentAmount,
             profitPercentage: pastProfitByMoth,
@@ -59,14 +63,14 @@ const FinancialCalculator2 = () => {
             currentAmount: resCase1Step1.nowInvestment,
             profitPercentage: fuacherProfitByMonth,
             inflationRatePercentage: fuacherInflationByMonth,
-            feesPercentage: feeByMonth,
+            feesPercentage: currentfeeByMonth,
             taxRatePercentage: TAX_RATE
         });
         console.log('CASE-1 step 2 - Input ', {
             currentAmount: resCase1Step1.nowInvestment,
             profitPercentage: fuacherProfitByMonth,
             inflationRatePercentage: fuacherInflationByMonth,
-            feesPercentage: feeByMonth,
+            feesPercentage: newfeeByMonth,
             taxRatePercentage: TAX_RATE
         });
         console.log('CASE-1 step 2 - Outpu', resCase1Step2);
@@ -75,14 +79,14 @@ const FinancialCalculator2 = () => {
             currentAmount: currentAmount,
             profitPercentage: fuacherProfitByMonth,
             inflationRatePercentage: pastInfulationByMoth + fuacherInflationByMonth,
-            feesPercentage: feeByMonth,
+            feesPercentage: currentfeeByMonth,
             taxRatePercentage: TAX_RATE
         });
         const resCase2 = calculateFucherProfit({
             currentAmount: currentAmount,
             profitPercentage: fuacherProfitByMonth,
             inflationRatePercentage: pastInfulationByMoth + fuacherInflationByMonth,
-            feesPercentage: feeByMonth,
+            feesPercentage: currentfeeByMonth,
             taxRatePercentage: TAX_RATE
         });
         console.log('CASE-2 Output', resCase2);
@@ -93,7 +97,7 @@ const FinancialCalculator2 = () => {
 
         setCurrentResult(resCase2.nowInvestment);
         setFutureResult(resCase1Step2.nowInvestment);
-        
+
 
     };
 
@@ -117,11 +121,32 @@ const FinancialCalculator2 = () => {
                     <h2 className="mb-0">כדאיות מעבר</h2>
                     <Form>
                         <Form.Group className="mb-3">
+                            <Form.Label>סכום כרגע בקרן</Form.Label>
                             <Form.Control
                                 type="number"
                                 value={currentAmount}
                                 onChange={(e) => setAmount(parseInt(e.target.value))}
                                 placeholder="סכום נוכחי (₪)"
+                                style={{ textAlign: 'right' }}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>כמה זמן בחודשים בקרן הנוכחית</Form.Label>
+                            <Form.Control
+                                type="number"
+                                value={numOfMothHold}
+                                onChange={(e) => setMothOfHold(parseInt(e.target.value))}
+                                placeholder="הכנס מספר חודשים"
+                                style={{ textAlign: 'right' }}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>כמה חודשים מתכוון להמשיך להחזיק</Form.Label>
+                            <Form.Control
+                                type="number"
+                                value={numOfMothWillHolding}
+                                onChange={(e) => setMothOfWillHolding(parseInt(e.target.value))}
+                                placeholder="הכנס מספר חודשים"
                                 style={{ textAlign: 'right' }}
                             />
                         </Form.Group>
@@ -147,16 +172,7 @@ const FinancialCalculator2 = () => {
                                             </Form.Select>
                                         </Form.Group>
 
-                                        <Form.Group className="mb-3">
-                                            <Form.Label>מספר חודשים</Form.Label>
-                                            <Form.Control
-                                                type="number"
-                                                value={numOfMothHold}
-                                                onChange={(e) => setMothOfHold(parseInt(e.target.value))}
-                                                placeholder="הכנס מספר חודשים"
-                                                style={{ textAlign: 'right' }}
-                                            />
-                                        </Form.Group>
+
                                     </Form>
                                 </Card.Body>
                             </Card>
@@ -180,16 +196,7 @@ const FinancialCalculator2 = () => {
                                             </Form.Select>
                                         </Form.Group>
 
-                                        <Form.Group className="mb-3">
-                                            <Form.Label>מספר חודשים</Form.Label>
-                                            <Form.Control
-                                                type="number"
-                                                value={numOfMothWillHolding}
-                                                onChange={(e) => setMothOfWillHolding(parseInt(e.target.value))}
-                                                placeholder="הכנס מספר חודשים"
-                                                style={{ textAlign: 'right' }}
-                                            />
-                                        </Form.Group>
+
                                     </Form>
                                 </Card.Body>
                             </Card>
@@ -207,7 +214,6 @@ const FinancialCalculator2 = () => {
                                         <th className="text-end">פרמטר</th>
                                         <th className="text-end">להשאר אם הקרן הנוכחית</th>
                                         <th className="text-end">להחליף לקרן</th>
-                                        <th className="text-end">הפרש</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -215,19 +221,17 @@ const FinancialCalculator2 = () => {
                                         <td className="fw-bold">סכום התחלתי</td>
                                         <td>₪{currentAmount.toLocaleString()}</td>
                                         <td>₪{currentAmount.toLocaleString()}</td>
-                                        <td>-</td>
                                     </tr>
                                     <tr>
                                         <td className="fw-bold">מכשיר פיננסי</td>
                                         <td>{getInstrumentLabel(currentFund)}</td>
                                         <td>{getInstrumentLabel(newFund)}</td>
-                                        <td>-</td>
                                     </tr>
-                                    <tr className="table-active">
+                                    {/* <tr className="table-active">
                                         <td className="fw-bold">תשלום מס </td>
                                         <td></td>
                                         <td>{case1Step1.nowInvestment.toLocaleString('he-il', { style: 'currency', currency: 'ILS' })}</td>
-                                    </tr>
+                                    </tr> */}
                                     <tr className="table-active">
                                         <td className="fw-bold">סכום לאחר מכירה לפני קניה</td>
                                         <td></td>
@@ -241,7 +245,10 @@ const FinancialCalculator2 = () => {
                                         <td className="fw-bold">
                                             {case1Step2.nowInvestment.toLocaleString('he-il', { style: 'currency', currency: 'ILS' })}
                                         </td>
-                                        <td className={`fw-bold ${futureResult > currentResult ? "text-success" : "text-danger"}`}>
+
+                                    </tr>
+                                    <tr>
+                                        <td colSpan={3} className={`fw-bold ${futureResult > currentResult ? "text-success" : "text-danger"}`}>
                                             ₪{Math.abs(futureResult - currentResult).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             ({((Math.abs(futureResult - currentResult) / currentResult) * 100).toFixed(1)}%)
                                         </td>
